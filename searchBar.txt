@@ -1,0 +1,235 @@
+import SwiftUI
+
+// Model for Event
+struct Event: Identifiable {
+    let id = UUID()
+    var name: String
+    var description: String
+    var dateTime: Date
+    var venue: String
+    var location: String
+    var fare: String
+}
+
+// Observable object to hold events
+class EventsViewModel: ObservableObject {
+    @Published var events: [Event] = []
+
+    func addEvent(_ event: Event) {
+        events.append(event)
+    }
+
+    func filteredEvents(for query: String) -> [Event] {
+        guard !query.isEmpty else {
+            return events
+        }
+        return events.filter { $0.name.localizedCaseInsensitiveContains(query) || $0.description.localizedCaseInsensitiveContains(query) }
+    }
+}
+
+// ContentView representing the main tab view
+struct ContentView: View {
+    @StateObject private var eventsViewModel = EventsViewModel()
+
+    var body: some View {
+        TabView {
+            // Browse Tab
+            BrowseView(eventsViewModel: eventsViewModel)
+                .tabItem {
+                    Image(systemName: "list.bullet")
+                    Text("Browse")
+                }
+
+            // Create Tab
+            CreateView(eventsViewModel: eventsViewModel)
+                .tabItem {
+                    Image(systemName: "plus.circle")
+                    Text("Create")
+                }
+
+            // Profile Tab
+            ProfileView()
+                .tabItem {
+                    Image(systemName: "person")
+                    Text("Profile")
+                }
+        }
+    }
+}
+
+// CreateView representing the Create tab
+struct CreateView: View {
+    @State private var isShowingAddEventDialog = false
+    @State private var eventName = ""
+    @State private var eventDescription = ""
+    @State private var date = Date()
+    @State private var venue = ""
+    @State private var location = ""
+    @State private var fare = ""
+
+    @ObservedObject var eventsViewModel: EventsViewModel
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                Spacer()
+                
+                List(eventsViewModel.events) { event in
+                                    NavigationLink(destination: EventDetailsView(event: event)) {
+                                        Text(event.name)
+                                    }
+                                }
+                                .navigationTitle("Your Events")
+                                .padding()
+                
+                Button(action: {
+                    self.isShowingAddEventDialog.toggle()
+                }) {
+                    Image(systemName: "plus")
+                        .font(.title)
+                        .padding()
+                }
+                .sheet(isPresented: $isShowingAddEventDialog) {
+                    AddEventDialog(isShowing: self.$isShowingAddEventDialog,
+                                   eventName: self.$eventName,
+                                   eventDescription: self.$eventDescription,
+                                   date: self.$date,
+                                   venue: self.$venue,
+                                   location: self.$location,
+                                   fare: self.$fare,
+                                   eventsViewModel: eventsViewModel)
+                }
+                Spacer()
+            }
+            .navigationTitle("Create")
+        }
+    }
+}
+
+// AddEventDialog representing the dialogue box to add an event
+struct AddEventDialog: View {
+    @Binding var isShowing: Bool
+    @Binding var eventName: String
+    @Binding var eventDescription: String
+    @Binding var date: Date
+    @Binding var venue: String
+    @Binding var location: String
+    @Binding var fare: String
+
+    @ObservedObject var eventsViewModel: EventsViewModel
+
+    
+    var body: some View {
+        VStack {
+            Text("Add Event")
+                .font(.title)
+                .padding()
+
+            // Text fields for event details
+            // Text fields for event details
+                        TextField("Event Name", text: $eventName)
+                                        .padding()
+
+                                    TextField("Event Description", text: $eventDescription)
+                                        .padding()
+
+                                    DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                                        .padding()
+
+                                    TextField("Venue", text: $venue)
+                                        .padding()
+
+                                    TextField("Location", text: $location)
+                                        .padding()
+
+                                    TextField("Fare", text: $fare)
+                                        .keyboardType(.decimalPad)
+                                        .padding()
+            
+            HStack {
+                Button("Cancel") {
+                    self.isShowing = false
+                }
+                .padding()
+
+                Button("Add") {
+                    let newEvent = Event(name: eventName,
+                                          description: eventDescription,
+                                          dateTime: date,
+                                          venue: venue,
+                                          location: location,
+                                          fare: fare)
+                    self.eventsViewModel.addEvent(newEvent)
+                    self.isShowing = false
+                }
+                .padding()
+            }
+        }
+        .padding()
+    }
+}
+
+// BrowseView representing the Browse tab
+struct BrowseView: View {
+    @ObservedObject var eventsViewModel: EventsViewModel
+    @State private var searchText = ""
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                SearchBar(text: $searchText)
+                    .padding(.top)
+                
+                List(eventsViewModel.filteredEvents(for: searchText.isEmpty ? "" : searchText)) { event in
+                    NavigationLink(destination: EventDetailsView(event: event)) {
+                        Text(event.name)
+                    }
+                }
+                .navigationTitle("Events")
+            }
+        }
+    }
+}
+
+//EventDetailsView representing the event details view
+struct EventDetailsView: View {
+    var event: Event
+
+    var body: some View {
+        Text(event.name)
+            .navigationTitle("Event Details")
+        Text(event.description)
+        Text(event.venue)
+        Text(event.location)
+        Text(event.fare)
+        
+    }
+}
+
+// ProfileView representing the Profile tab
+struct ProfileView: View {
+    var body: some View {
+        Text("Profile View")
+    }
+}
+
+// SearchBar representing the search bar
+struct SearchBar: View {
+    @Binding var text: String
+
+    var body: some View {
+        HStack {
+            TextField("Search", text: $text)
+                .padding(.horizontal)
+                .textFieldStyle(RoundedBorderTextFieldStyle())
+
+            Button(action: {
+                UIApplication.shared.sendAction(#selector(UIResponder.resignFirstResponder), to: nil, from: nil, for: nil)
+            }) {
+                Image(systemName: "xmark.circle.fill")
+                    .foregroundColor(.gray)
+                    .padding(.trailing)
+            }
+        }
+    }
+}

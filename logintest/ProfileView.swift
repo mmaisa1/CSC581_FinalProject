@@ -1,0 +1,32 @@
+import SwiftUI
+
+struct ProfileView: View {
+    @State private var actualName = ""
+    @State private var username = ""
+    @State private var email = ""
+    @State private var contactNumber = ""
+
+    init(name: String, username: String, email: String, contactNumber: String) {
+            self._actualName = State(initialValue: name)
+            self._username = State(initialValue: username)
+            self._email = State(initialValue: email)
+            self._contactNumber = State(initialValue: contactNumber)
+        }
+
+    var body: some View {
+            VStack (){
+                Text("Profile").font(.largeTitle).padding(20)
+                TextField("Actual Name", text: $actualName)
+                    .padding()
+                
+                TextField("Username", text: $username)
+                    .padding()
+                
+                TextField("Email", text: $email)
+                    .padding()
+                
+                TextField("Contact Number", text: $contactNumber)
+                    .padding()
+            }
+    }
+}

@@ -1,0 +1,15 @@
+import SwiftUI
+
+struct EventDetailsView: View {
+    var event: Event
+
+    var body: some View {
+        Text(event.name)
+            .navigationTitle("Event Details")
+        Text(event.description)
+        Text(event.venue)
+        Text(event.location)
+        Text(event.fare)
+    }
+}
+

@@ -1,0 +1,46 @@
+import SwiftUI
+
+struct RegistrationView: View {
+    @State private var name = ""
+    @State private var username = ""
+    @State private var email = ""
+    @State private var contactNumber = ""
+    @State private var password = ""
+    @State private var isRegistered = false
+
+    var body: some View {
+        NavigationView {
+            VStack {
+                TextField("Name", text: $name)
+                    .padding()
+                
+                TextField("Username", text: $username)
+                    .padding()
+                
+                TextField("Email", text: $email)
+                    .padding()
+                
+                TextField("Contact Number", text: $contactNumber)
+                    .padding()
+                
+                SecureField("Password", text: $password)
+                    .padding()
+                
+                Button("Submit") {
+                    // Perform registration action
+                    // Save user details
+                    // Navigate to ProfileView
+                    isRegistered = true
+                }
+                .padding()
+                .background(
+                    NavigationLink(
+                        destination: ProfileView(actualName: name, username: username, email: email, contactNumber: contactNumber),
+                        isActive: $isRegistered) {
+                            EmptyView()
+                        }
+                )
+            }
+        }
+    }
+}

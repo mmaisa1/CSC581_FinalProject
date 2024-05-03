@@ -1,0 +1,40 @@
+import SwiftUI
+
+struct ContentView: View {
+    @StateObject private var eventsViewModel = EventsViewModel()
+
+    var body: some View {
+        ZStack {
+            // Background image as watermark
+            Image("background_watermark")
+                .resizable()
+                .aspectRatio(contentMode: .fill)
+                .edgesIgnoringSafeArea(.all)
+                .opacity(0.3) // Adjust opacity as needed
+            
+            TabView {
+                // Browse Tab
+                BrowseView(eventsViewModel: eventsViewModel)
+                    .tabItem {
+                        Image(systemName: "list.bullet")
+                        Text("Browse")
+                    }
+
+                // Create Tab
+                CreateView(eventsViewModel: eventsViewModel)
+                    .tabItem {
+                        Image(systemName: "plus.circle")
+                        Text("Create")
+                    }
+
+                // Profile Tab
+                ProfileView()
+                    .tabItem {
+                        Image(systemName: "person")
+                        Text("Profile")
+                    }
+            }
+            .padding()
+        }
+    }
+}

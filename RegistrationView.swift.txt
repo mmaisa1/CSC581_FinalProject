@@ -7,6 +7,7 @@ struct RegistrationView: View {
     @State private var contactNumber = ""
     @State private var password = ""
     @State private var isRegistered = false
+    @Binding var isShowing: Bool
 
     var body: some View {
         NavigationView {
@@ -31,12 +32,12 @@ struct RegistrationView: View {
                     // Save user details
                     // Navigate to ProfileView
                     isRegistered = true
+                    self.isShowing = false
                 }
                 .padding()
                 .background(
                     NavigationLink(
-                        destination: ProfileView(actualName: name, username: username, email: email, contactNumber: contactNumber),
-                        isActive: $isRegistered) {
+                        destination: ProfileView(name: name, username: username, email: email, contactNumber: contactNumber) ){
                             EmptyView()
                         }
                 )

@@ -6,6 +6,7 @@ struct RegistrationView: View {
     @State private var email = ""
     @State private var contactNumber = ""
     @State private var password = ""
+    @State private var errorMessage = "" // Error message state
     @Environment(\.presentationMode) var presentationMode
 
     var body: some View {
@@ -25,6 +26,11 @@ struct RegistrationView: View {
                 
                 SecureField("Password", text: $password)
                     .padding()
+                
+                Text(errorMessage) // Display error message
+                    .foregroundColor(.red)
+                    .padding()
+                    .opacity(errorMessage.isEmpty ? 0 : 1) // Hide if empty
                 
                 HStack {
                     Button(action: {
@@ -48,6 +54,12 @@ struct RegistrationView: View {
     
     // Function to handle registration action
     func registerUser() {
+        // Check if username and password fields are empty
+        if username.isEmpty || password.isEmpty {
+            errorMessage = "Empty fields!" // Set error message
+            return
+        }
+        
         // Create a new UserCredentials object and append it to staticUsers array
         let newUser = UserCredentials(username: username, password: password)
         staticUsers.append(newUser)

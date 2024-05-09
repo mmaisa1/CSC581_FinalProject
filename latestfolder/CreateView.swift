@@ -61,49 +61,54 @@ struct AddEventDialog: View {
     @ObservedObject var eventsViewModel: EventsViewModel
 
     var body: some View {
-        VStack {
-            Text("Add Event")
-                .font(.title)
-                .padding()
+        NavigationView { // Wrap in NavigationView
+            VStack {
+                Text("Add Event")
+                    .font(.title)
+                    .padding()
 
-            TextField("Event Name", text: $eventName)
-                .padding()
+                TextField("Event Name", text: $eventName)
+                    .padding()
 
-            TextField("Event Description", text: $eventDescription)
-                .padding()
+                TextField("Event Description", text: $eventDescription)
+                    .padding()
 
-            DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
-                .padding()
+                DatePicker("Date", selection: $date, displayedComponents: [.date, .hourAndMinute])
+                    .padding()
 
-            TextField("Venue", text: $venue)
-                .padding()
+                TextField("Venue", text: $venue)
+                    .padding()
 
-            TextField("Location", text: $location)
-                .padding()
+                TextField("Location", text: $location)
+                    .padding()
 
-            TextField("Fare", text: $fare)
-                .keyboardType(.decimalPad)
-                .padding()
-            
-            HStack {
-                Button("Cancel") {
-                    self.isShowing = false
+                TextField("Fare", text: $fare)
+                    .keyboardType(.decimalPad)
+                    .padding()
+                
+                Spacer() // Add Spacer to push content to the top
+                
+                HStack {
+                    Button("Cancel") {
+                        self.isShowing = false
+                    }
+                    .padding()
+
+                    Button("Add") {
+                        let newEvent = Event(name: eventName,
+                                              description: eventDescription,
+                                              dateTime: date,
+                                              venue: venue,
+                                              location: location,
+                                              fare: fare)
+                        self.eventsViewModel.addEvent(newEvent)
+                        self.isShowing = false
+                    }
+                    .padding()
                 }
-                .padding()
-
-                Button("Add") {
-                    let newEvent = Event(name: eventName,
-                                          description: eventDescription,
-                                          dateTime: date,
-                                          venue: venue,
-                                          location: location,
-                                          fare: fare)
-                    self.eventsViewModel.addEvent(newEvent)
-                    self.isShowing = false
-                }
-                .padding()
             }
+            .padding()
+           // .navigationBarTitle(Text("Add Event"), displayMode: .inline) // Set navigation bar title
         }
-        .padding()
     }
 }

@@ -1,3 +1,4 @@
+
 import SwiftUI
 
 struct UserCredentials {
@@ -21,7 +22,7 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Login")
+                Text("Locale")
                     .font(.largeTitle)
                     .padding()
                 
@@ -55,7 +56,12 @@ struct LoginView: View {
                     .padding()
                 }
                 
-                NavigationLink(destination: RegistrationView()) {
+                NavigationLink(destination: RegistrationView()
+                    .navigationBarBackButtonHidden(true)
+                    .onDisappear { // Clear input fields when navigating away
+                        self.username = ""
+                        self.password = ""
+                    }) {
                     Text("Register")
                         .foregroundColor(.blue)
                 }

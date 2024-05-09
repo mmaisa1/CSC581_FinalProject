@@ -14,14 +14,38 @@ struct Event: Identifiable {
 struct EventDetailsView: View {
     var event: Event
 
-    var body: some View {
-        Text(event.name)
+        var body: some View {
+            VStack(alignment: .leading) {
+                Text(event.name)
+                    .font(.title)
+                    .padding(.bottom)
+
+                Text(event.description)
+                    .padding(.bottom)
+
+                Text("Date: \(formattedDate(event.dateTime))")
+                    .padding(.bottom)
+
+                Text("Venue: \(event.venue)")
+                    .padding(.bottom)
+
+                Text("Location: \(event.location)")
+                    .padding(.bottom)
+
+                Text("Fare: \(event.fare)")
+                    .padding(.bottom)
+            }
+           
             .navigationTitle("Event Details")
-        Text(event.description)
-        Text(event.venue)
-        Text(event.location)
-        Text(event.fare)
-    }
+        }
+
+        // Function to format the date
+        private func formattedDate(_ date: Date) -> String {
+            let formatter = DateFormatter()
+            formatter.dateStyle = .medium
+            formatter.timeStyle = .short
+            return formatter.string(from: date)
+        }
 }
 
 // Observable object to hold events

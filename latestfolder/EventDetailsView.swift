@@ -51,6 +51,12 @@ struct EventDetailsView: View {
 // Observable object to hold events
 class EventsViewModel: ObservableObject {
     @Published var events: [Event] = []
+        @Published var savedEvents: [Event] = []
+
+        // Function to save an event
+        func saveEvent(_ event: Event) {
+            savedEvents.append(event)
+        }
 
     func addEvent(_ event: Event) {
         events.append(event)
@@ -63,3 +69,4 @@ class EventsViewModel: ObservableObject {
         return events.filter { $0.name.localizedCaseInsensitiveContains(query) || $0.description.localizedCaseInsensitiveContains(query) }
     }
 }
+

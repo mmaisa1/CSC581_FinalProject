@@ -2,14 +2,17 @@
 import SwiftUI
 
 struct UserCredentials {
+    let name: String
     let username: String
     let password: String
+    let email: String
+    let contact: String
 }
 
 // Static data for user credentials
 var staticUsers: [UserCredentials] = [
-    UserCredentials(username: "User1", password: "password1"),
-    UserCredentials(username: "User2", password: "password2")
+    UserCredentials(name: "user 1",username: "User1", password: "password1", email: "user1@locale.com", contact: "1231231231"),
+    UserCredentials(name: "user 2", username: "User2", password: "password2", email: "user2@locale.com", contact: "1231231234")
 ]
 
 struct LoginView: View {
@@ -22,7 +25,7 @@ struct LoginView: View {
     var body: some View {
         NavigationView {
             VStack {
-                Text("Locale")
+                Text("Login")
                     .font(.largeTitle)
                     .padding()
                 
@@ -67,7 +70,7 @@ struct LoginView: View {
                 }
                 .padding()
             }
-            .navigationTitle("Login")
+            .navigationTitle("Locale")
             .onAppear {
                 if isClearingFields {
                     self.username = ""

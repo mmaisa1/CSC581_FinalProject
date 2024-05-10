@@ -21,6 +21,11 @@ struct ContentView: View {
                     Image(systemName: "plus.circle")
                     Text("Create")
                 }
+            FavoritesView(eventsViewModel: eventsViewModel)
+                .tabItem {
+                    Image(systemName: "bookmark")
+                    Text("Saved")
+                }
 
             // Profile Tab
             ProfileView(username: username) // Pass isLoggedIn as a binding

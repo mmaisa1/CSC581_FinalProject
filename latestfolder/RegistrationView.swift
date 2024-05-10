@@ -61,7 +61,7 @@ struct RegistrationView: View {
         }
         
         // Create a new UserCredentials object and append it to staticUsers array
-        let newUser = UserCredentials(username: username, password: password)
+        let newUser = UserCredentials(name: name, username: username, password: password, email: email, contact: contactNumber)
         staticUsers.append(newUser)
         
         // Dismiss the registration view

@@ -69,4 +69,3 @@ class EventsViewModel: ObservableObject {
         return events.filter { $0.name.localizedCaseInsensitiveContains(query) || $0.description.localizedCaseInsensitiveContains(query) }
     }
 }
-

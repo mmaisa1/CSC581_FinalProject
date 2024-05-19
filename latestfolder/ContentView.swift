@@ -1,42 +1,48 @@
-
 import SwiftUI
 
 struct ContentView: View {
-    //@State private var isLoggedIn = true // Initial value for the authentication state
     @StateObject private var eventsViewModel = EventsViewModel()
     var username: String // Receive the authenticated username
 
     var body: some View {
-        TabView {
-            // Browse Tab
-            BrowseView(eventsViewModel: eventsViewModel)
-                .tabItem {
-                    Image(systemName: "list.bullet")
-                    Text("Browse")
-                }
+        ZStack { // Use ZStack to layer background and content
+            //Color.blue.opacity(0.4)
+                //.edgesIgnoringSafeArea(.all)
 
-            // Create Tab
-            CreateView(eventsViewModel: eventsViewModel)
-                .tabItem {
-                    Image(systemName: "plus.circle")
-                    Text("Create")
-                }
-            FavoritesView(eventsViewModel: eventsViewModel)
-                .tabItem {
-                    Image(systemName: "bookmark")
-                    Text("Saved")
-                }
+            VStack {
+                TabView {
+                    // Browse Tab
+                    BrowseView(eventsViewModel: eventsViewModel)
+                        .tabItem {
+                            Image(systemName: "list.bullet")
+                            Text("Browse")
+                        }
 
-            // Profile Tab
-            ProfileView(username: username) // Pass isLoggedIn as a binding
-                .tabItem {
-                    Image(systemName: "person")
-                    Text("Profile")
+                    // Create Tab
+                    CreateView(eventsViewModel: eventsViewModel)
+                        .tabItem {
+                            Image(systemName: "plus.circle")
+                            Text("Create")
+                        }
+
+                    // Favorites Tab
+                    FavoritesView(eventsViewModel: eventsViewModel)
+                        .tabItem {
+                            Image(systemName: "bookmark")
+                            Text("Saved")
+                        }
+
+                    // Profile Tab
+                    ProfileView(username: username)
+                        .tabItem {
+                            Image(systemName: "person")
+                            Text("Profile")
+                        }
                 }
+                .clipShape(RoundedRectangle(cornerRadius: 20))
+                .padding()
+                .background(Color.pink.opacity(0.4)) // Set background color for TabView
+            }
         }
-        .padding()
-        /*.fullScreenCover(isPresented: $isLoggedIn) {
-            LoginView()
-        }*/
     }
 }
